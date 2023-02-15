@@ -1,4 +1,4 @@
-package com.dkl.hudi.spark3_1
+package com.dkl.hudi.spark2_4
 
 import org.apache.spark.sql.SparkSession
 
@@ -57,7 +57,8 @@ object SparkSQLDemo {
          | )
          |""".stripMargin)
   }
-
+//  ,
+//  hive_sync.enable = 'false'
   def testInsertTable(spark: SparkSession): Unit = {
     spark.sql(s"insert into $tableName values (1,'hudi',10,100,'2022-09-05'),(2,'hudi',10,100,'2022-09-05')")
     spark.sql(
@@ -92,7 +93,7 @@ object SparkSQLDemo {
          |on t0.id = s0.id
          |when matched and opt_type!='DELETE' then update set *
          |when matched and opt_type='DELETE' then delete
-         |when not matched and opt_type!='DELETE' then insert (id, name, price, ts, dt) values (s0.id, s0.name, s0.price, s0.ts, s0.dt)
+         |when not matched and opt_type!='DELETE' then insert *
          |""".stripMargin)
   }
 }
