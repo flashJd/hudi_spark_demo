@@ -23,7 +23,7 @@ object SparkSQLDemo {
 
     spark.sql(s"show databases").show()
     spark.sql(s"use xiamen").show()
-    spark.sql(s"drop table $tableName").show()
+    spark.sql(s"drop table if exists $tableName").show()
 
     testCreateTable(spark)
 
@@ -33,8 +33,6 @@ object SparkSQLDemo {
     testMergeTable(spark)
 
     testQueryTable(spark)
-
-    spark.sql(s"drop table if exists $tableName")
 
     spark.stop()
   }

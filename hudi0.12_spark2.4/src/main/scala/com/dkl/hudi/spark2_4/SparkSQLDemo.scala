@@ -15,15 +15,17 @@ object SparkSQLDemo {
       config("spark.serializer", "org.apache.spark.serializer.KryoSerializer").
       // 扩展Spark SQL，使Spark SQL支持Hudi
       config("spark.sql.extensions", "org.apache.spark.sql.hudi.HoodieSparkSessionExtension").
-      // 支持Hive，本地测试时，注释掉
-      //      enableHiveSupport().
       config("hive.metastore.uris", "thrift://localhost:9083").
+      // 适配不同版本hive, https://docs.databricks.com/data/metastores/external-hive-metastore.html
+      // config("spark.sql.hive.metastore.version", "2.3.3").
+      // config("spark.sql.hive.metastore.jars", "maven").
+      // 支持Hive，本地测试时，注释掉
       enableHiveSupport().
       getOrCreate()
 
     spark.sql(s"show databases").show()
     spark.sql(s"use xiamen").show()
-    spark.sql(s"drop table $tableName").show()
+    spark.sql(s"drop table if exists $tableName").show()
 
     testCreateTable(spark)
 
@@ -33,8 +35,6 @@ object SparkSQLDemo {
     testMergeTable(spark)
 
     testQueryTable(spark)
-
-    spark.sql(s"drop table if exists $tableName")
 
     spark.stop()
   }
