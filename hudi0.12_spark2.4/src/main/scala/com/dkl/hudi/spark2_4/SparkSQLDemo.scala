@@ -17,15 +17,18 @@ object SparkSQLDemo {
       config("spark.sql.extensions", "org.apache.spark.sql.hudi.HoodieSparkSessionExtension").
       config("hive.metastore.uris", "thrift://localhost:9083").
       // 适配不同版本hive, https://docs.databricks.com/data/metastores/external-hive-metastore.html
-      // config("spark.sql.hive.metastore.version", "2.3.3").
+      config("spark.sql.hive.metastore.version", "2.3.3").
+      config("spark.sql.hive.metastore.jars", "/project/spark_module/spark-2.4.4-bin-hadoop2.7/hive-metastore-jar/*:/root/.m2/repository/org/apache/hudi/hudi-spark-bundle_2.11/0.12.2/*").
       // config("spark.sql.hive.metastore.jars", "maven").
-      // 支持Hive，本地测试时，注释掉
+      // 支持Hive
       enableHiveSupport().
       getOrCreate()
 
     spark.sql(s"show databases").show()
     spark.sql(s"use xiamen").show()
-    spark.sql(s"drop table if exists $tableName").show()
+
+//    // spark2.4 drop table if exists not work
+//    spark.sql(s"drop table if exists $tableName").show()
 
     testCreateTable(spark)
 
